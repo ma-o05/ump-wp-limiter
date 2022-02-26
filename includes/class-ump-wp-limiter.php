@@ -156,6 +156,9 @@ class Ump_Wp_Limiter {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'ump_wp_limiter_add_plugin_page' );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'ump_wp_limiter_page_init' );
+		$this->loader->add_action( 'admin_head', $plugin_admin, 'umpl_wp_limiter_webinar_list' );
 
 	}
 
@@ -172,6 +175,7 @@ class Ump_Wp_Limiter {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		add_shortcode( 'umpl-wp-limiter', array( $plugin_public, 'umpl_wp_limiter' ) );
 
 	}
 

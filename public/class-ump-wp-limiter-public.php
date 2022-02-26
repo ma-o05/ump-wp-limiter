@@ -100,4 +100,44 @@ class Ump_Wp_Limiter_Public {
 
 	}
 
+	/**
+	 * Show the webinar form if the user has not exceeded the membership limit
+	 *
+	 * @param array   {}
+	 * @param string  Shortcode content.
+	 *
+	 * @return string HTML content to display the shortcode.
+	 */
+	public function umpl_wp_limiter( $atts, $content = null ) {
+	    $atts = shortcode_atts( array(
+	        'id' => 'umpl_wp_limiter',
+	    ), $atts, 'umpl-wp-limiter' );
+
+	    $uid = get_current_user_id();
+	    $MemberAddEdit = new \Indeed\Ihc\Admin\MemberAddEdit();
+	    $data = $MemberAddEdit->setUid( $uid )->getUserData();
+	    $data['subscriptions'] = \Indeed\Ihc\UserSubscriptions::getAllForUser( $uid, false );
+	    $webinars_limit = 0;
+	    $webinars_user_count = count_user_posts($uid, 'wswebinars');
+	    $ump_wp_limiter_options = get_option( 'ump_wp_limiter_option_name' );
+
+	    foreach ($data['subscriptions'] as $subscription) {
+	        $subscriptionMetas = \Indeed\Ihc\Db\UserSubscriptionsMeta::getAllForSubscription( $subscription['id'] );
+	        $webinars_limit = $webinars_limit + $subscriptionMetas['webinars_limit'];
+	    
+	    }
+	    $html = '<div class="alert alert-danger">';
+	    if ($webinars_limit <= $webinars_user_count) {
+	    	$html .= sprintf( __('You have created <b>%1$s</b> of <b>%2$s</b> that your plan allows, %3$s'), $webinars_user_count, $webinars_limit, $ump_wp_limiter_options['custom_message_text_0'] );
+	    	$html .= '<a href="'.$ump_wp_limiter_options['custom_button_url_2'].'" class="button button-primary">'.$ump_wp_limiter_options['custom_button_text_1'].'</a>';
+	    }else{
+	    	$html .= sprintf( __('You have created <b>%1$s</b> of <b>%2$s</b> that your plan allows'), $webinars_user_count, $webinars_limit );
+	        $html .= do_shortcode($content);
+	    }
+	    $html .= '</div>';
+
+	    return $html;
+
+	}
+
 }
