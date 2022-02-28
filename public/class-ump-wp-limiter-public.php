@@ -74,6 +74,7 @@ class Ump_Wp_Limiter_Public {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/ump-wp-limiter-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css' );
 
 	}
 
@@ -97,6 +98,8 @@ class Ump_Wp_Limiter_Public {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/ump-wp-limiter-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'popper', 'https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js' );
+		wp_enqueue_script( 'bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js' );
 
 	}
 
@@ -129,7 +132,7 @@ class Ump_Wp_Limiter_Public {
 	    $html = '<div class="alert alert-danger">';
 	    if ($webinars_limit <= $webinars_user_count) {
 	    	$html .= sprintf( __('You have created <b>%1$s</b> of <b>%2$s</b> that your plan allows, %3$s'), $webinars_user_count, $webinars_limit, $ump_wp_limiter_options['custom_message_text_0'] );
-	    	$html .= '<a href="'.$ump_wp_limiter_options['custom_button_url_2'].'" class="button button-primary">'.$ump_wp_limiter_options['custom_button_text_1'].'</a>';
+	    	$html .= '<a href="'.$ump_wp_limiter_options['custom_button_url_2'].'" class="btn btn-primary btn-sm float-right">'.$ump_wp_limiter_options['custom_button_text_1'].'</a>';
 	    }else{
 	    	$html .= sprintf( __('You have created <b>%1$s</b> of <b>%2$s</b> that your plan allows'), $webinars_user_count, $webinars_limit );
 	        $html .= do_shortcode($content);
