@@ -159,6 +159,7 @@ class Ump_Wp_Limiter {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'ump_wp_limiter_add_plugin_page' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'ump_wp_limiter_page_init' );
 		$this->loader->add_action( 'admin_head', $plugin_admin, 'umpl_wp_limiter_webinar_list' );
+		$this->loader->add_action( 'pre_get_posts', $plugin_admin, 'umpl_wp_limiter_pre_get_posts' );
 
 	}
 

@@ -239,4 +239,12 @@ class Ump_Wp_Limiter_Admin {
 		}
 	}
 
+	public function umpl_wp_limiter_pre_get_posts($wp_query){
+		if ( !current_user_can('administrator') && !current_user_can('editor') ) {
+			$wp_query->set( 'author', get_current_user_id() );
+		}
+
+		return $wp_query;
+	}
+
 }
