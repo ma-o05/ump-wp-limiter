@@ -14,7 +14,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       UMP WebinarPress limit
- * Plugin URI:        https://zzani.com/
+ * Plugin URI:        https://github.com/ma-o05/ump-wp-limiter
  * Description:       This plugin adds custom fields to Ultimate Membership Pro membership forms and validates the number of webinars from Webinarpress a user can create based on their membership, in addition to hiding the admin bar and redirecting to the "Tutor" user after login
  * Version:           1.0.0
  * Author:            Zzani Web Studio
