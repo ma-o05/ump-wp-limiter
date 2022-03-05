@@ -29,4 +29,10 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
+
 })( jQuery );
+
+function umpl_wp_limiter_custom_fields(webinars_limit = null){
+	var html = '<div class="iump-form-line iump-no-border"><div class="row"><div class="col-xs-4"><div class="input-group"><h4>Limite de webinars</h4><input name="webinars_limit" type="number" value="'+webinars_limit+'" class="ihc-plan-details-price-text"></div></div></div></div>';
+	jQuery('.ihc-plan-details-wrapper').append(html);
+}

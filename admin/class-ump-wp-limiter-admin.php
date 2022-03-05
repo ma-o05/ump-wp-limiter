@@ -169,6 +169,14 @@ class Ump_Wp_Limiter_Admin {
 			'ump-wp-limiter-admin', // page
 			'ump_wp_limiter_setting_section' // section
 		);
+
+		add_settings_field( 
+			'custom_page_redirect_3', 
+			'Tutor after login page redirect', 
+			array( $this, 'umpl_wp_limiter_wp_dropdown_pages' ), 
+			'ump-wp-limiter-admin', 
+			'ump_wp_limiter_setting_section' 
+		);
 	}
 
 	public function ump_wp_limiter_sanitize($input) {
@@ -183,6 +191,10 @@ class Ump_Wp_Limiter_Admin {
 
 		if ( isset( $input['custom_button_url_2'] ) ) {
 			$sanitary_values['custom_button_url_2'] = sanitize_text_field( $input['custom_button_url_2'] );
+		}
+
+		if ( isset( $input['custom_page_redirect_3'] ) ) {
+			$sanitary_values['custom_page_redirect_3'] = sanitize_text_field( $input['custom_page_redirect_3'] );
 		}
 
 		return $sanitary_values;
@@ -241,10 +253,46 @@ class Ump_Wp_Limiter_Admin {
 
 	public function umpl_wp_limiter_pre_get_posts($wp_query){
 		if ( !current_user_can('administrator') && !current_user_can('editor') ) {
-			$wp_query->set( 'author', get_current_user_id() );
+			if ( is_admin() ) {
+				$wp_query->set( 'author', get_current_user_id() );
+			}
 		}
 
 		return $wp_query;
+	}
+
+	public function umpl_wp_limiter_level_admin_html(){
+		if(isset($_REQUEST['edit_level']) || isset($_REQUEST['new_level'])){
+			if(isset($_REQUEST['edit_level'])){
+				$level_data = \Indeed\Ihc\Db\Memberships::getOne( $_REQUEST['edit_level'] );
+				$webinars_limit = $level_data['webinars_limit'];
+				?>
+				<script>
+					jQuery(document).ready(function($) {
+						umpl_wp_limiter_custom_fields(<?php echo $webinars_limit; ?>);
+					});
+				</script>
+				<?php
+			}else{
+				?>
+				<script>
+					jQuery(document).ready(function($) {
+						umpl_wp_limiter_custom_fields();
+					});
+				</script>
+				<?php
+			}
+
+		}
+	}
+
+	public function umpl_wp_limiter_wp_dropdown_pages(){
+		$ump_wp_limiter_options = get_option( 'ump_wp_limiter_option_name' );
+		$dropdown_args = array(
+	        'selected'         => $ump_wp_limiter_options['custom_page_redirect_3'],
+	        'name'             => 'ump_wp_limiter_option_name[custom_page_redirect_3]',
+	    );
+		wp_dropdown_pages( $dropdown_args );
 	}
 
 }

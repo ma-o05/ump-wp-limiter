@@ -144,5 +144,21 @@ class Ump_Wp_Limiter_Public {
 	    return $html;
 
 	}
+	 
+	function umpl_wp_limiter_hide_admin_bar() {
+	    if ( current_user_can( 'tutor_instructor' ) ) {
+	        show_admin_bar( false );
+	    }
+	}
+
+	function wpse306427_login_redirect( $redirect_to, $request, $user ) {
+	    if (isset($user->roles) && is_array($user->roles)) {
+	        if (in_array('tutor_instructor', $user->roles)) {
+	        	$ump_wp_limiter_options = get_option( 'ump_wp_limiter_option_name' );
+	            $redirect_to =  get_page_link($ump_wp_limiter_options['custom_page_redirect_3']);
+	        }
+	    }
+	    return $redirect_to;
+	}
 
 }
