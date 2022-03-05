@@ -179,7 +179,7 @@ class Ump_Wp_Limiter {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		$this->loader->add_action( 'wp', $plugin_public, 'umpl_wp_limiter_hide_admin_bar' );
 		$this->loader->add_action( 'admin_init', $plugin_public, 'umpl_wp_limiter_hide_admin_bar', 9 );
-		$this->loader->add_filter( 'login_redirect', $plugin_public, 'wpse306427_login_redirect', 10, 3 );
+		$this->loader->add_filter( 'login_redirect', $plugin_public, 'umpl_wp_limiter_login_redirect', 10, 3 );
 		add_shortcode( 'umpl-wp-limiter', array( $plugin_public, 'umpl_wp_limiter' ) );
 
 	}
