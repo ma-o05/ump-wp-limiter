@@ -237,16 +237,41 @@ class Ump_Wp_Limiter_Admin {
 		foreach ($data['subscriptions'] as $subscription) {
 		    $subscriptionMetas = \Indeed\Ihc\Db\UserSubscriptionsMeta::getAllForSubscription( $subscription['id'] );
 		    $webinars_limit = $webinars_limit + $subscriptionMetas['webinars_limit'];
+		    $show_paid_webinar = $subscriptionMetas['webinars_limit'];
 		
 		}
 
 		if ( !current_user_can( 'administrator' ) && $webinars_limit <= $webinars_user_count ) {
 			?>
 			<style>
-				.wpws-203.wpws-177.wpws-188.wpws-189.wpws-191.wpws-192 {
+				.wpws-203.wpws-177.wpws-188.wpws-189.wpws-191.wpws-192{
 				  display: none !important;
 				}
 			</style>
+			<?php
+		}
+	}
+
+	public function umpl_wp_limiter_webinar_hide_paid_webinar(){
+		$uid = get_current_user_id();
+		$MemberAddEdit = new \Indeed\Ihc\Admin\MemberAddEdit();
+		$data = $MemberAddEdit->setUid( $uid )->getUserData();
+		$data['subscriptions'] = \Indeed\Ihc\UserSubscriptions::getAllForUser( $uid, false );
+		$show_paid_webinar = '';
+
+		foreach ($data['subscriptions'] as $subscription) {
+		    $subscriptionMetas = \Indeed\Ihc\Db\UserSubscriptionsMeta::getAllForSubscription( $subscription['id'] );
+		    $show_paid_webinar = $subscriptionMetas['webinars_limit'];
+		
+		}
+
+		if ( !current_user_can( 'administrator' ) && $show_paid_webinar == 'on' ) {
+			?>
+			<script>
+				jQuery(window).load(function(){
+					umpl_wp_limiter_hide_paid_webinar();
+				});
+			</script>
 			<?php
 		}
 	}
@@ -266,10 +291,11 @@ class Ump_Wp_Limiter_Admin {
 			if(isset($_REQUEST['edit_level'])){
 				$level_data = \Indeed\Ihc\Db\Memberships::getOne( $_REQUEST['edit_level'] );
 				$webinars_limit = $level_data['webinars_limit'];
+				$show_paid_webinar = $level_data['show_paid_webinar'];
 				?>
 				<script>
 					jQuery(document).ready(function($) {
-						umpl_wp_limiter_custom_fields(<?php echo $webinars_limit; ?>);
+						umpl_wp_limiter_custom_fields(<?php echo $webinars_limit; ?>, '<?php echo $show_paid_webinar; ?>');
 					});
 				</script>
 				<?php
@@ -293,6 +319,27 @@ class Ump_Wp_Limiter_Admin {
 	        'name'             => 'ump_wp_limiter_option_name[custom_page_redirect_3]',
 	    );
 		wp_dropdown_pages( $dropdown_args );
+	}
+
+	public function umpl_wp_limiter_hide_notices_dashboard() {
+	    global $wp_filter;
+
+	    if (current_user_can('tutor_instructor')) {
+		    if (is_network_admin() and isset($wp_filter["network_admin_notices"])) {
+		        unset($wp_filter['network_admin_notices']);
+		    } elseif(is_user_admin() and isset($wp_filter["user_admin_notices"])) {
+		        unset($wp_filter['user_admin_notices']);
+		    } else {
+		        if(isset($wp_filter["admin_notices"])) {
+		            unset($wp_filter['admin_notices']);
+		        }
+		    }
+		 
+		    if (isset($wp_filter["all_admin_notices"])) {
+		        unset($wp_filter['all_admin_notices']);
+		    }
+	    }
+	 
 	}
 
 }
