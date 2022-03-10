@@ -236,8 +236,9 @@ class Ump_Wp_Limiter_Admin {
 
 		foreach ($data['subscriptions'] as $subscription) {
 		    $subscriptionMetas = \Indeed\Ihc\Db\UserSubscriptionsMeta::getAllForSubscription( $subscription['id'] );
-		    $webinars_limit = $webinars_limit + $subscriptionMetas['webinars_limit'];
-		    $show_paid_webinar = $subscriptionMetas['webinars_limit'];
+		    if ( !empty( $subscriptionMetas['webinars_limit'] ) ){
+			    $webinars_limit = $webinars_limit + $subscriptionMetas['webinars_limit'];
+		    }
 		
 		}
 
@@ -290,12 +291,16 @@ class Ump_Wp_Limiter_Admin {
 		if(isset($_REQUEST['edit_level']) || isset($_REQUEST['new_level'])){
 			if(isset($_REQUEST['edit_level'])){
 				$level_data = \Indeed\Ihc\Db\Memberships::getOne( $_REQUEST['edit_level'] );
-				$webinars_limit = $level_data['webinars_limit'];
-				$show_paid_webinar = $level_data['show_paid_webinar'];
+				$webinars_limit = 0;
+
+			    if ( !empty( $level_data['webinars_limit'] ) ){
+					$webinars_limit = $level_data['webinars_limit'];				    
+			    }
+				//$show_paid_webinar = $level_data['show_paid_webinar'];
 				?>
 				<script>
 					jQuery(document).ready(function($) {
-						umpl_wp_limiter_custom_fields(<?php echo $webinars_limit; ?>, '<?php echo $show_paid_webinar; ?>');
+						umpl_wp_limiter_custom_fields(<?php echo $webinars_limit; ?>);
 					});
 				</script>
 				<?php

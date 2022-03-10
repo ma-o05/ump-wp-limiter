@@ -32,13 +32,8 @@
 
 })( jQuery );
 
-function umpl_wp_limiter_custom_fields(webinars_limit = null, show_paid_webinar = null){
-	if ( show_paid_webinar == 'on' ) {
-		show_paid_webinar_selected = 'selected'
-	}else{
-		show_paid_webinar_selected = ''		
-	}
-	var html = '<div class="iump-form-line iump-no-border"><div class="row"><div class="col-xs-4"><div class="input-group"><h4>Limite de webinars</h4><input name="webinars_limit" type="number" value="'+webinars_limit+'" class="ihc-plan-details-price-text"></div></div></div></div><div class="iump-form-line iump-no-border"><h4>Show/Hide Paid webinar</h4><select name="show_paid_webinar" id="show_paid_webinar"><option value="off">SHOW</option><option value="on" '+show_paid_webinar_selected+'>HIDE</option></select></div>';
+function umpl_wp_limiter_custom_fields(webinars_limit = null){
+	var html = '<div class="iump-form-line iump-no-border"><div class="row"><div class="col-xs-4"><div class="input-group"><h4>Limite de webinars</h4><input name="webinars_limit" type="number" value="'+webinars_limit+'" class="ihc-plan-details-price-text"></div></div></div></div>';
 	jQuery('.ihc-plan-details-wrapper').append(html);
 }
 
